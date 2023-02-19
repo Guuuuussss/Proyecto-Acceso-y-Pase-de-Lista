@@ -11,7 +11,7 @@ try:
         host='database-1.ccolsljrufdk.us-east-2.rds.amazonaws.com',
         port='3306',
         user='admin',
-        password='admin',
+        password='Brisa_3121',
         db='rfid_read'
     )
 
@@ -19,14 +19,10 @@ try:
         print("Conexion exitosa.")
         while True:
             id=lector.read()
-            #registro = str(data)
-            #print(registro)
-            #print(len(registro))
-            #registro1 = registro[7:18]
-            #print(registro1)
-            print(id)
+            registro = str(id)
+            registro1 = registro[1:13]
             cursor=conexion.cursor()
-            cursor.execute("INSERT INTO rfid_data (Member_ID) VALUES (%s)", [(id)])
+            cursor.execute("INSERT INTO rfid_data (Members_ID) VALUES (%s)", [(registro1)])
             conexion.commit()
             cursor.close()
             print("Registro insertado con exito.")
