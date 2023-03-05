@@ -11,7 +11,6 @@ CREATE  TABLE accesos.usuarios (
 ALTER TABLE accesos.usuarios MODIFY identificador INT UNSIGNED NOT NULL   COMMENT 'id de la tarjeta rfid';
 
 
----------------------------------------------
 
 
 CREATE  TABLE accesos.accesos ( 
@@ -25,7 +24,6 @@ ALTER TABLE accesos.accesos ADD CONSTRAINT profesor FOREIGN KEY ( id_profesor ) 
 ALTER TABLE accesos.accesos COMMENT 'tabla de accesos de los profesores';
 
 
-----------------------------------------------
 
 
 CREATE  TABLE accesos.clases ( 
