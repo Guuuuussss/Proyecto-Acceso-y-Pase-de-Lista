@@ -1,3 +1,4 @@
+import mysql.connector
 import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter.font import BOLD
@@ -10,7 +11,23 @@ class App:
     def verificar(self):
         usu = self.usuario.get()
         password = self.password.get()
-        if(usu == "root" and password == "1234"):
+
+        # Conectar con la base de datos MySQL
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Briza_3121",
+            database="accesos"
+        )
+
+        # Ejecutar una consulta SQL para validar el usuario y contraseña
+        mycursor = mydb.cursor()
+        sql = "SELECT * FROM accesos.usuarios WHERE matricula = %s AND contraseña = %s"
+        val = (usu, password)
+        mycursor.execute(sql, val)
+        result = mycursor.fetchone()
+
+        if result:
             self.ventana.destroy()
             MasterPanel()
         else:
