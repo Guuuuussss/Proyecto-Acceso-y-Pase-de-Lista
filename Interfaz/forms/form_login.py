@@ -22,7 +22,7 @@ class App:
 
         # Ejecutar una consulta SQL para validar el usuario y contraseña
         mycursor = mydb.cursor()
-        sql = "SELECT * FROM accesos.usuarios WHERE matricula = %s AND contraseña = %s"
+        sql = "SELECT * FROM accesos.usuarios WHERE matricula = %s AND contraseña = %s AND tipo_usuario = 'A'"
         val = (usu, password)
         mycursor.execute(sql, val)
         result = mycursor.fetchone()
@@ -32,6 +32,7 @@ class App:
             MasterPanel()
         else:
             messagebox.showerror(message="La contraseña no es correcta",title="Mensaje")
+        
 
 
     def __init__(self):
@@ -67,7 +68,7 @@ class App:
 
         # etiquetas, entrys y boton
         etiqueta_usuario = tk.Label(frame_form_fill, text="Número de cuenta", font=('Times',14), fg="black",bg='#fcfcfc', anchor="w")
-        etiqueta_usuario.pack(fill=tk.X, padx=20,pady=5)
+        etiqueta_usuario.pack(fill=tk.X, padx=20,pady=10)
         self.usuario = ttk.Entry(frame_form_fill, font=('Times',14),width=20)
         self.usuario.pack(fill=None, padx=20,pady=10,anchor="w")
 
