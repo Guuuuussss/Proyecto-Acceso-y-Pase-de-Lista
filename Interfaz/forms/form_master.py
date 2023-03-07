@@ -52,6 +52,24 @@ class MasterPanel:
         cursor.close()
         conexion.close()
 
+        self.eliminar_celdas()
+
+        self.celdas = []
+        conexion = self.conectar_bd()
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM accesos.usuarios')
+        registros = cursor.fetchall()
+
+        for i, fila in enumerate(registros):
+            for j, valor in enumerate(fila):
+                celda = tk.Label(self.tabla_db, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
+                celda.grid(row=i, column=j)
+                self.celdas.append(celda)
+        
+        conexion.commit()  #si deja de funcionar eliminar esta linea
+        cursor.close()
+        conexion.close()
+
 
     def __init__(self):
         self.ventana = tk.Tk()
@@ -142,6 +160,7 @@ class MasterPanel:
         # hacer que cuando le den click al boton se llame una funcion con lo de abajo 
 
         # Obtener los registros de la tabla
+        self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
         cursor.execute('SELECT * FROM accesos.usuarios')
@@ -149,14 +168,20 @@ class MasterPanel:
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
-                self.celda = tk.Label(self.tabla_db, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                self.celda.grid(row=i, column=j)
+                celda = tk.Label(self.tabla_db, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
+                celda.grid(row=i, column=j)
+                self.celdas.append(celda)
 
         cursor.close()
         conexion.close()
 
         
         self.ventana.mainloop()
+
+    # Crear una función para eliminar las celdas
+    def eliminar_celdas(self):
+        for celda in self.celdas:
+            celda.destroy()
 
         
 
