@@ -12,10 +12,15 @@ class App:
         usu = self.usuario.get()
         password = self.password.get()
 
+        # Verificar si los campos de entrada están vacíos
+        if not usu or not password:
+            messagebox.showerror(message="Por favor ingrese la información requerida", title="Error")
+            return
+
         # Conectar con la base de datos MySQL
         mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
+            host="192.168.100.8",
+            user="remote",
             password="Briza_3121",
             database="accesos"
         )
@@ -26,6 +31,7 @@ class App:
         val = (usu, password)
         mycursor.execute(sql, val)
         result = mycursor.fetchone()
+
 
         if result:
             self.ventana.destroy()
@@ -43,7 +49,7 @@ class App:
         self.ventana.resizable(width=0,height=0)
         utl.centrar_ventana(self.ventana,800,500)
 
-        logo = utl.leer_imagen("Proyecto-Acceso-y-Pase-de-Lista/Interfaz/images/logo.png", (200,200))
+        logo = utl.leer_imagen("Interfaz\images\logo.png", (200,200))
 
         # Frame_logo
 
@@ -78,7 +84,7 @@ class App:
         self.password.pack(fill=None, padx=20,pady=10,anchor="w")
         self.password.config(show="*")
 
-        inicio = tk.Button(frame_form_fill, text="Iniciar sesión", font=('Times', 15), bd=0,bg='red',width=20,command=self.verificar)
+        inicio = tk.Button(frame_form_fill, text="Iniciar sesión", font=('Times', 15), bd=0,bg='#EC3F45',fg='white',width=20,command=self.verificar)
         inicio.pack(fill=None, padx=20, pady=20)
         inicio.bind("<Return>",(lambda event: self.verificar()))
 
