@@ -19,7 +19,7 @@ class App:
 
         # Conectar con la base de datos MySQL
         mydb = mysql.connector.connect(
-            host="192.168.100.8",
+            host="192.168.100.10",
             user="remote",
             password="Briza_3121",
             database="accesos"

@@ -10,7 +10,7 @@ class MasterPanel:
     def conectar_bd(self):
     # Conectar a la base de datos
         conexion = mysql.connector.connect(
-            host='192.168.100.8',
+            host='192.168.100.10',
             user='remote',
             password='Briza_3121',
             database='accesos'
@@ -62,7 +62,7 @@ class MasterPanel:
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
-                celda = tk.Label(self.tabla_db, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
+                celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
                 celda.grid(row=i, column=j)
                 self.celdas.append(celda)
         
@@ -132,12 +132,13 @@ class MasterPanel:
        
         # boton Agregar
         agregar = tk.Button(frame_admin, text="Agregar", font=('Times', 15), bd=0,bg='#fcfcfc',width=15,command=self.agregar_usuario)
-        agregar.pack(side=tk.LEFT,fill=None, padx=15, pady=130)
+        agregar.pack(side=tk.LEFT,fill=None, padx=15, pady=100)
         agregar.bind("<Return>",(lambda event: self.agregar_usuario()))
 
         # boton eliminar
         eliminar = tk.Button(frame_admin, text="Eliminar", font=('Times', 15), bd=0,bg='#fcfcfc',width=15)
-        eliminar.pack(side=tk.RIGHT,fill=None, padx=15, pady=130)
+        eliminar.pack(side=tk.RIGHT,fill=None, padx=15, pady=100)
+
 
         # frame_tabla
         frame_tabla = tk.Frame(self.ventana, bd=0, relief=tk.SOLID, bg='#fcfcfc')
@@ -147,17 +148,55 @@ class MasterPanel:
         frame_tabla_top = tk.Frame(frame_tabla, height=50, bd=0, relief=tk.SOLID)
         frame_tabla_top.pack(side="top",fill=tk.X)
         title = tk.Label(frame_tabla_top,text="Registros", font=('Times',15), fg="black",bg='#fcfcfc', pady=20)
-        title.pack(expand=tk.YES,fill=tk.BOTH)
+        title.grid(row=0, column=0, padx=20, pady=5)
 
         # frame_tabla_buttom
         frame_tabla_buttom = tk.Frame(frame_tabla,height=50, bd=0, relief=tk.SOLID, bg='#fcfcfc')
         frame_tabla_buttom.pack(side="bottom",expand=tk.YES,fill=tk.BOTH)
-        
+
         # Crear la tabla para mostrar los registros
         self.tabla_db = tk.Frame(frame_tabla_buttom,bg='#fcfcfc')
-        self.tabla_db.pack(fill=tk.BOTH, expand=True)
+        self.tabla_db.pack(fill=tk.BOTH, expand=tk.YES)
 
-        # hacer que cuando le den click al boton se llame una funcion con lo de abajo 
+       # Crear un canvas para permitir el desplazamiento de los registros de la tabla
+        self.canvas_tabla = tk.Canvas(self.tabla_db, bg="#FFFFFF")
+        self.canvas_tabla.pack(side="left", fill="both", expand=True)
+
+        # Crear un scrollbar vertical para el canvas
+        self.scrollbar_tabla = tk.Scrollbar(self.tabla_db, orient="vertical", command=self.canvas_tabla.yview)
+        self.scrollbar_tabla.pack(side="right", fill="y")
+
+        # Configurar el canvas para vincularlo al scrollbar
+        self.canvas_tabla.configure(yscrollcommand=self.scrollbar_tabla.set)
+        self.canvas_tabla.bind("<Configure>", lambda e: self.canvas_tabla.configure(scrollregion=self.canvas_tabla.bbox("all")))
+
+        # Crear un frame dentro del canvas para contener los labels de la tabla
+        self.frame_contenido = tk.Frame(self.canvas_tabla, bg="#FFFFFF")
+        self.canvas_tabla.create_window((0, 0), window=self.frame_contenido, anchor="nw")
+
+
+        ### HEADER TABLA ###
+
+        # Crear etiquetas para la cabecera de la tabla
+        cabecera_identificador = tk.Label(frame_tabla_top, text="Identificador", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_nombre = tk.Label(frame_tabla_top, text="Nombre", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_apellido_p = tk.Label(frame_tabla_top, text="Apellido Paterno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_apellido_m = tk.Label(frame_tabla_top, text="Apellido Materno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_matricula = tk.Label(frame_tabla_top, text="Número de Cuenta", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_tipo_usuario = tk.Label(frame_tabla_top, text="Tipo de usuario", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_contrasena = tk.Label(frame_tabla_top, text="Contraseña", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+
+        cabecera_identificador.grid(row=1, column=0, padx=20, pady=5)
+        cabecera_nombre.grid(row=1, column=1, padx=20, pady=5)
+        cabecera_apellido_p.grid(row=1, column=2, padx=20, pady=5)
+        cabecera_apellido_m.grid(row=1, column=3, padx=20, pady=5)
+        cabecera_matricula.grid(row=1, column=4, padx=20, pady=5)
+        cabecera_tipo_usuario.grid(row=1, column=5, padx=20, pady=5)
+        cabecera_contrasena.grid(row=1, column=6, padx=20, pady=5)
+        
+
+        
+
 
         # Obtener los registros de la tabla
         self.celdas = []
@@ -168,8 +207,8 @@ class MasterPanel:
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
-                celda = tk.Label(self.tabla_db, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                celda.grid(row=i, column=j)
+                celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
+                celda.grid(row=i+1, column=j, padx=20,pady=10)
                 self.celdas.append(celda)
 
         cursor.close()
