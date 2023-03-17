@@ -2,18 +2,13 @@ import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
+import pyodbc
 
 lector = SimpleMFRC522()
 
 ####Conexion a base de datos 
 try: 
-    conexion = mysql.connector.connect(
-        host='database-1.ccolsljrufdk.us-east-2.rds.amazonaws.com',
-        port='3306',
-        user='admin',
-        password='Brisa_3121',
-        db='rfid_read'
-    )
+    conexion = pyodbc.connect('DRIVER={SQL Server};SERVER=192.168.100.7,1433;DATABASE=rfid_read;UID=sa;PWD=Briza_3121')
 
     if conexion.is_connected():
         print("Conexion exitosa.")
