@@ -6,7 +6,6 @@ import mysql.connector
 
 class MasterPanel: 
 
-
     def conectar_bd(self):
     # Conectar a la base de datos
         conexion = mysql.connector.connect(
@@ -221,6 +220,9 @@ class MasterPanel:
     def eliminar_celdas(self):
         for celda in self.celdas:
             celda.destroy()
+
+
+#hola
 
         
 
