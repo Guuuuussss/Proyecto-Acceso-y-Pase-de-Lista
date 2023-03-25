@@ -56,13 +56,13 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios')
+        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
                 celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                celda.grid(row=i, column=j)
+                celda.grid(row=i, column=j, padx=20,pady=10)
                 self.celdas.append(celda)
         
         conexion.commit()  #si deja de funcionar eliminar esta linea
@@ -144,10 +144,10 @@ class MasterPanel:
         frame_tabla.pack(side="left", expand=tk.YES, fill=tk.BOTH)
 
         # frame_tabla_top
-        frame_tabla_top = tk.Frame(frame_tabla, height=50, bd=0, relief=tk.SOLID)
+        frame_tabla_top = tk.Frame(frame_tabla, height=50, bd=0, relief=tk.SOLID,bg="#999392")
         frame_tabla_top.pack(side="top",fill=tk.X)
-        title = tk.Label(frame_tabla_top,text="Registros", font=('Times',15), fg="black",bg='#fcfcfc', pady=20)
-        title.grid(row=0, column=0, padx=20, pady=5)
+        title = tk.Label(frame_tabla_top,text="Registros", font=('Times',25), fg="black",bg='#999392', pady=20)
+        title.grid(row=0, column=3, padx=20, pady=5)
 
         # frame_tabla_buttom
         frame_tabla_buttom = tk.Frame(frame_tabla,height=50, bd=0, relief=tk.SOLID, bg='#fcfcfc')
@@ -177,21 +177,21 @@ class MasterPanel:
         ### HEADER TABLA ###
 
         # Crear etiquetas para la cabecera de la tabla
-        cabecera_identificador = tk.Label(frame_tabla_top, text="Identificador", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_nombre = tk.Label(frame_tabla_top, text="Nombre", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_apellido_p = tk.Label(frame_tabla_top, text="Apellido Paterno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_apellido_m = tk.Label(frame_tabla_top, text="Apellido Materno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_matricula = tk.Label(frame_tabla_top, text="Número de Cuenta", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_tipo_usuario = tk.Label(frame_tabla_top, text="Tipo de usuario", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_contrasena = tk.Label(frame_tabla_top, text="Contraseña", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_identificador = tk.Label(frame_tabla_top, text="Identificador", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_nombre = tk.Label(frame_tabla_top, text="Nombre", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_apellido_p = tk.Label(frame_tabla_top, text="Apellido Paterno", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_apellido_m = tk.Label(frame_tabla_top, text="Apellido Materno", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_matricula = tk.Label(frame_tabla_top, text="Número de Cuenta", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_tipo_usuario = tk.Label(frame_tabla_top, text="Tipo de usuario", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_contrasena = tk.Label(frame_tabla_top, text="Contraseña", font=('Times', 14, 'bold'), fg="black", bg='#999392')
 
-        cabecera_identificador.grid(row=1, column=0, padx=20, pady=5)
-        cabecera_nombre.grid(row=1, column=1, padx=20, pady=5)
-        cabecera_apellido_p.grid(row=1, column=2, padx=20, pady=5)
-        cabecera_apellido_m.grid(row=1, column=3, padx=20, pady=5)
-        cabecera_matricula.grid(row=1, column=4, padx=20, pady=5)
-        cabecera_tipo_usuario.grid(row=1, column=5, padx=20, pady=5)
-        cabecera_contrasena.grid(row=1, column=6, padx=20, pady=5)
+        cabecera_identificador.grid(row=1, column=0, padx=47, pady=5,)
+        cabecera_nombre.grid(row=1, column=1, padx=55, pady=5)
+        cabecera_apellido_p.grid(row=1, column=2, padx=33, pady=5)
+        cabecera_apellido_m.grid(row=1, column=3, padx=23, pady=5)
+        cabecera_matricula.grid(row=1, column=4, padx=15, pady=5)
+        cabecera_tipo_usuario.grid(row=1, column=5, padx=0, pady=5)
+        cabecera_contrasena.grid(row=1, column=6, padx=45, pady=5)
         
 
         
@@ -201,13 +201,13 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios')
+        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
                 celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                celda.grid(row=i+1, column=j, padx=20,pady=10)
+                celda.grid(row=i+1, column=j, padx=55,pady=10)
                 self.celdas.append(celda)
 
         cursor.close()
@@ -222,7 +222,7 @@ class MasterPanel:
             celda.destroy()
 
 
-#hola
+
 
         
 
