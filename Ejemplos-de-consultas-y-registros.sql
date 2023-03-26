@@ -26,6 +26,7 @@ CREATE  TABLE accesos.clases (
  ) engine=InnoDB;
 
 
+
 INSERT INTO accesos.usuarios (identificador, nombre, apellido_p, apellido_m, matricula, tipo_usuario, contraseña)
 VALUES 
 (374203472, 'Juan', 'Pérez', 'García', 12345, 'P', 'password123'),

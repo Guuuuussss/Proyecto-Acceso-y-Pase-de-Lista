@@ -3,7 +3,7 @@ from tkinter import END, ttk, messagebox
 from tkinter.font import BOLD
 import util.generic as utl
 import mysql.connector
-import threading
+
 
 class MasterPanel: 
 
@@ -15,7 +15,7 @@ class MasterPanel:
             password='Briza_3121',
             database='accesos'
         )
-    
+   
         return conexion
 
     def agregar_usuario(self):
