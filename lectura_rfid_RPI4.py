@@ -6,21 +6,64 @@ import pyodbc
 
 lector = SimpleMFRC522()
 
-####Conexion a base de datos 
+
+
+
+def conectar_bd():
+    # Conectar a la base de datos
+        conexion = mysql.connector.connect(
+            host='192.168.100.10',
+            user='remote',
+            password='Briza_3121',
+            database='accesos'
+        )
+    
+        return conexion
+
+def registrar_acceso():
+
+    if tipo_usuario == "P":
+        cursor=conexion.cursor()
+        query = "INSERT INTO accesos.accesos(identificador) VALUES(%s) "
+        cursor.execute(query,(identificador))
+        conexion.commit()
+        cursor.close()
+
 try: 
-    conexion = pyodbc.connect('DRIVER={SQL Server};SERVER=192.168.100.7,1433;DATABASE=rfid_read;UID=sa;PWD=Briza_3121')
+    conexion = conectar_bd()
 
     if conexion.is_connected():
         print("Conexion exitosa.")
         while True:
             id=lector.read()
             registro = str(id)
-            registro1 = registro[1:13]
+            identificador = registro[1:13]
             cursor=conexion.cursor()
-            cursor.execute("INSERT INTO rfid_data (Members_ID) VALUES (%s)", [(registro1)])
+            query = "SELECT * FROM accesos.usuarios WHERE identificador = %s;"
+            
+            try:
+                cursor.execute(query, (identificador,))
+                resultado = cursor.fetchone()
+                identificador = resultado[0]
+                nombre = resultado[1]
+                apellido_p = resultado[2]
+                apellido_m = resultado[3]
+                matricula = resultado[4]
+                tipo_usuario = resultado[5]
+                contrasena = resultado[6]
+                # aquí puedes hacer lo que quieras con las variables obtenidas
+
+                registrar_acceso()
+
+            except Exception as e:
+                print("Error", f"No se pudo ejecutar el query: {e}")
+            
             conexion.commit()
             cursor.close()
-            print("Registro insertado con exito.")
+           
+            
+
+            
 except Error as ex:
     print("Error durante la conexion.", ex)
 finally:
@@ -28,4 +71,9 @@ finally:
         conexion.close()
         GPIO.cleanup()
         print("La conexion ha finalizado")
+
+
+
+
+
 
