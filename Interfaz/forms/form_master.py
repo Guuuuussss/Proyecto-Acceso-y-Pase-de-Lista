@@ -4,8 +4,8 @@ from tkinter.font import BOLD
 import util.generic as utl
 import mysql.connector
 
-class MasterPanel: 
 
+class MasterPanel: 
 
     def conectar_bd(self):
     # Conectar a la base de datos
@@ -15,7 +15,7 @@ class MasterPanel:
             password='Briza_3121',
             database='accesos'
         )
-    
+   
         return conexion
 
     def agregar_usuario(self):
@@ -38,6 +38,12 @@ class MasterPanel:
 
         query = "INSERT INTO accesos.usuarios(identificador,nombre,apellido_p,apellido_m,matricula,tipo_usuario,contraseña) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (identificador_agregar, nombre_agregar, apellido_p_agregar, apellido_m_agregar, matricula_agregar, tipo_usuario_agregar, contrasena_agregar))
+
+        if cursor.rowcount > 0:
+            mensaje = "Registro agregado con éxito"
+        else:
+            mensaje = "No se ha podido agregar el registro"
+        messagebox.showinfo(title="Agregado de registro", message=mensaje)
         
         # Limpiar los entrys después de agregar los datos a la base de datos
         self.identificador.delete(0, END)
@@ -57,13 +63,64 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios')
+        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
                 celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                celda.grid(row=i, column=j)
+                celda.grid(row=i, column=j, padx=55,pady=10)
+                self.celdas.append(celda)
+        
+        conexion.commit()  #si deja de funcionar eliminar esta linea
+        cursor.close()
+        conexion.close()
+
+    def eliminar_usuario(self):
+        identificador_eliminar = self.identificador.get()
+
+       
+        if not identificador_eliminar:
+            messagebox.showerror(message="Por favor ingrese el identificador que desea eliminar.", title="Error")
+            return
+        
+        conexion = self.conectar_bd()
+        cursor = conexion.cursor()
+
+        query = "DELETE FROM accesos.usuarios WHERE identificador = %s"
+        cursor.execute(query, (identificador_eliminar,))
+
+        if cursor.rowcount > 0:
+            mensaje = "Registro eliminado con éxito"
+        else:
+            mensaje = "No se ha encontrado ningún registro con el identificador especificado"
+        messagebox.showinfo(title="Eliminación de registro", message=mensaje)
+
+        # Limpiar los entrys después de agregar los datos a la base de datos
+        self.identificador.delete(0, END)
+        self.nombre.delete(0, END)
+        self.apellido_p.delete(0, END)
+        self.apellido_m.delete(0, END)
+        self.matricula.delete(0, END)
+        self.tipo_usuario.delete(0, END)
+        self.contrasena.delete(0, END)
+
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+
+        self.eliminar_celdas()
+
+        self.celdas = []
+        conexion = self.conectar_bd()
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
+        registros = cursor.fetchall()
+
+        for i, fila in enumerate(registros):
+            for j, valor in enumerate(fila):
+                celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
+                celda.grid(row=i, column=j, padx=55,pady=10)
                 self.celdas.append(celda)
         
         conexion.commit()  #si deja de funcionar eliminar esta linea
@@ -136,7 +193,7 @@ class MasterPanel:
         agregar.bind("<Return>",(lambda event: self.agregar_usuario()))
 
         # boton eliminar
-        eliminar = tk.Button(frame_admin, text="Eliminar", font=('Times', 15), bd=0,bg='#fcfcfc',width=15)
+        eliminar = tk.Button(frame_admin, text="Eliminar", font=('Times', 15), bd=0,bg='#fcfcfc',width=15,command=self.eliminar_usuario)
         eliminar.pack(side=tk.RIGHT,fill=None, padx=15, pady=100)
 
 
@@ -145,10 +202,10 @@ class MasterPanel:
         frame_tabla.pack(side="left", expand=tk.YES, fill=tk.BOTH)
 
         # frame_tabla_top
-        frame_tabla_top = tk.Frame(frame_tabla, height=50, bd=0, relief=tk.SOLID)
+        frame_tabla_top = tk.Frame(frame_tabla, height=50, bd=0, relief=tk.SOLID,bg="#999392")
         frame_tabla_top.pack(side="top",fill=tk.X)
-        title = tk.Label(frame_tabla_top,text="Registros", font=('Times',15), fg="black",bg='#fcfcfc', pady=20)
-        title.grid(row=0, column=0, padx=20, pady=5)
+        title = tk.Label(frame_tabla_top,text="Registros", font=('Times',25), fg="black",bg='#999392', pady=20)
+        title.grid(row=0, column=3, padx=20, pady=5)
 
         # frame_tabla_buttom
         frame_tabla_buttom = tk.Frame(frame_tabla,height=50, bd=0, relief=tk.SOLID, bg='#fcfcfc')
@@ -178,37 +235,33 @@ class MasterPanel:
         ### HEADER TABLA ###
 
         # Crear etiquetas para la cabecera de la tabla
-        cabecera_identificador = tk.Label(frame_tabla_top, text="Identificador", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_nombre = tk.Label(frame_tabla_top, text="Nombre", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_apellido_p = tk.Label(frame_tabla_top, text="Apellido Paterno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_apellido_m = tk.Label(frame_tabla_top, text="Apellido Materno", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_matricula = tk.Label(frame_tabla_top, text="Número de Cuenta", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_tipo_usuario = tk.Label(frame_tabla_top, text="Tipo de usuario", font=('Times', 14, 'bold'), fg="white", bg='#333333')
-        cabecera_contrasena = tk.Label(frame_tabla_top, text="Contraseña", font=('Times', 14, 'bold'), fg="white", bg='#333333')
+        cabecera_identificador = tk.Label(frame_tabla_top, text="Identificador", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_nombre = tk.Label(frame_tabla_top, text="Nombre", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_apellido_p = tk.Label(frame_tabla_top, text="Apellido Paterno", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_apellido_m = tk.Label(frame_tabla_top, text="Apellido Materno", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_matricula = tk.Label(frame_tabla_top, text="Número de Cuenta", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_tipo_usuario = tk.Label(frame_tabla_top, text="Tipo de usuario", font=('Times', 14, 'bold'), fg="black", bg='#999392')
+        cabecera_contrasena = tk.Label(frame_tabla_top, text="Contraseña", font=('Times', 14, 'bold'), fg="black", bg='#999392')
 
-        cabecera_identificador.grid(row=1, column=0, padx=20, pady=5)
-        cabecera_nombre.grid(row=1, column=1, padx=20, pady=5)
-        cabecera_apellido_p.grid(row=1, column=2, padx=20, pady=5)
-        cabecera_apellido_m.grid(row=1, column=3, padx=20, pady=5)
-        cabecera_matricula.grid(row=1, column=4, padx=20, pady=5)
-        cabecera_tipo_usuario.grid(row=1, column=5, padx=20, pady=5)
-        cabecera_contrasena.grid(row=1, column=6, padx=20, pady=5)
-        
-
-        
-
-
+        cabecera_identificador.grid(row=1, column=0, padx=47, pady=5,)
+        cabecera_nombre.grid(row=1, column=1, padx=55, pady=5)
+        cabecera_apellido_p.grid(row=1, column=2, padx=33, pady=5)
+        cabecera_apellido_m.grid(row=1, column=3, padx=23, pady=5)
+        cabecera_matricula.grid(row=1, column=4, padx=15, pady=5)
+        cabecera_tipo_usuario.grid(row=1, column=5, padx=0, pady=5)
+        cabecera_contrasena.grid(row=1, column=6, padx=45, pady=5)
+    
         # Obtener los registros de la tabla
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios')
+        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
             for j, valor in enumerate(fila):
                 celda = tk.Label(self.frame_contenido, text=str(valor),font=('Times',14), fg="black",bg='#fcfcfc')
-                celda.grid(row=i+1, column=j, padx=20,pady=10)
+                celda.grid(row=i+1, column=j, padx=55,pady=10)
                 self.celdas.append(celda)
 
         cursor.close()
@@ -221,6 +274,9 @@ class MasterPanel:
     def eliminar_celdas(self):
         for celda in self.celdas:
             celda.destroy()
+
+
+
 
         
 
