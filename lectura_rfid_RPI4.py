@@ -15,7 +15,7 @@ def conectar_bd():
             host='192.168.100.10',
             user='remote',
             password='Briza_3121',
-            database='accesos'
+            database='proyecto_accesos'
         )
     
         return conexion
@@ -24,10 +24,14 @@ def registrar_acceso():
 
     if tipo_usuario == "P":
         cursor=conexion.cursor()
-        query = "INSERT INTO accesos.accesos(identificador) VALUES(%s) "
-        cursor.execute(query,(identificador))
+        query = "INSERT INTO proyecto_accesos.accesos (fecha_acceso, identificador) VALUES (CURRENT_TIMESTAMP(), %s)"
+        valores = (identificador)
+        cursor.execute(query,valores)
         conexion.commit()
         cursor.close()
+    else:
+        print("No se puede agregar un acceso para un usuario que no es profesor")
+
 
 try: 
     conexion = conectar_bd()
@@ -39,7 +43,7 @@ try:
             registro = str(id)
             identificador = registro[1:13]
             cursor=conexion.cursor()
-            query = "SELECT * FROM accesos.usuarios WHERE identificador = %s;"
+            query = "SELECT * FROM proyecto_accesos.usuarios WHERE identificador = %s;"
             
             try:
                 cursor.execute(query, (identificador,))
