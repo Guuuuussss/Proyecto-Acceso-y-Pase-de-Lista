@@ -22,12 +22,12 @@ class App:
             host="192.168.100.10",
             user="remote",
             password="Briza_3121",
-            database="accesos"
+            database="proyecto_accesos"
         )
 
         # Ejecutar una consulta SQL para validar el usuario y contraseña
         mycursor = mydb.cursor()
-        sql = "SELECT * FROM accesos.usuarios WHERE matricula = %s AND contraseña = %s AND tipo_usuario = 'A'"
+        sql = "SELECT * FROM proyecto_accesos.usuarios WHERE matricula = %s AND contraseña = %s AND tipo_usuario = 'A'"
         val = (usu, password)
         mycursor.execute(sql, val)
         result = mycursor.fetchone()

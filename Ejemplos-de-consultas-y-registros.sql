@@ -32,6 +32,36 @@ VALUES
 (374203472, 'Juan', 'Pérez', 'García', 12345, 'P', 'password123'),
 (097420342, 'Gustavo', 'Luna', 'Maya', 209070, 'P', 'password193');
 
+-- Crear tabla "usuarios"
+CREATE TABLE accesos.usuarios ( 
+    identificador  BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    nombre         VARCHAR(30) NOT NULL,
+    apellido_p     VARCHAR(30) NOT NULL,
+    apellido_m     VARCHAR(30) NOT NULL,
+    matricula      BIGINT UNSIGNED NOT NULL,
+    tipo_usuario   VARCHAR(30) NOT NULL,
+    contraseña     VARCHAR(20) NOT NULL
+) ENGINE=InnoDB;
+
+-- Crear tabla "accesos"
+CREATE TABLE accesos.accesos ( 
+    id             INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    fecha_acceso   TIMESTAMP NOT NULL,
+    identificador  BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (identificador) REFERENCES usuarios(identificador) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Crear tabla "clases"
+CREATE TABLE accesos.clases ( 
+    id               INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre_materia   VARCHAR(30) NOT NULL,
+    salon            VARCHAR(10) NOT NULL,
+    horario          VARCHAR(20) NOT NULL,
+    id_profesor      BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (id_profesor) REFERENCES usuarios(identificador) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
 
 INSERT INTO accesos.clases (nombre_materia, salon, horario, id_profesor)
 VALUES ('Historia', 'B50', 'Martes 10:00-11:00', 374203472);

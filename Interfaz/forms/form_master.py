@@ -13,7 +13,7 @@ class MasterPanel:
             host='192.168.100.10',
             user='remote',
             password='Briza_3121',
-            database='accesos'
+            database='proyecto_accesos'
         )
    
         return conexion
@@ -36,7 +36,7 @@ class MasterPanel:
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
 
-        query = "INSERT INTO accesos.usuarios(identificador,nombre,apellido_p,apellido_m,matricula,tipo_usuario,contraseña) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO proyecto_accesos.usuarios(identificador,nombre,apellido_p,apellido_m,matricula,tipo_usuario,contraseña) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (identificador_agregar, nombre_agregar, apellido_p_agregar, apellido_m_agregar, matricula_agregar, tipo_usuario_agregar, contrasena_agregar))
 
         if cursor.rowcount > 0:
@@ -63,7 +63,7 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
+        cursor.execute('SELECT * FROM proyecto_accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
@@ -87,7 +87,7 @@ class MasterPanel:
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
 
-        query = "DELETE FROM accesos.usuarios WHERE identificador = %s"
+        query = "DELETE FROM proyecto_accesos.usuarios WHERE identificador = %s"
         cursor.execute(query, (identificador_eliminar,))
 
         if cursor.rowcount > 0:
@@ -114,7 +114,7 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
+        cursor.execute('SELECT * FROM proyecto_accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
@@ -255,7 +255,7 @@ class MasterPanel:
         self.celdas = []
         conexion = self.conectar_bd()
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM accesos.usuarios ORDER BY nombre')
+        cursor.execute('SELECT * FROM proyecto_accesos.usuarios ORDER BY nombre')
         registros = cursor.fetchall()
 
         for i, fila in enumerate(registros):
