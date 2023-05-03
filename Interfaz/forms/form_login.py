@@ -19,7 +19,7 @@ class App:
 
         # Conectar con la base de datos MySQL
         mydb = mysql.connector.connect(
-            host="192.168.100.10",
+            host="192.168.100.9",
             user="remote",
             password="Briza_3121",
             database="proyecto_accesos"
@@ -73,15 +73,15 @@ class App:
         frame_form_fill.pack(side="bottom",expand=tk.YES,fill=tk.BOTH)
 
         # etiquetas, entrys y boton
-        etiqueta_usuario = tk.Label(frame_form_fill, text="Número de cuenta", font=('Times',14), fg="black",bg='#fcfcfc', anchor="w")
+        etiqueta_usuario = tk.Label(frame_form_fill, text="Número de cuenta", font=('Times',14), fg="black",bg='#fcfcfc', anchor="center")
         etiqueta_usuario.pack(fill=tk.X, padx=20,pady=10)
         self.usuario = ttk.Entry(frame_form_fill, font=('Times',14),width=20)
-        self.usuario.pack(fill=None, padx=20,pady=10,anchor="w")
+        self.usuario.pack(fill=None, padx=20,pady=10,anchor="center")
 
-        etiqueta_password = tk.Label(frame_form_fill, text="Contraseña", font=('Times',14), fg="black",bg='#fcfcfc', anchor="w")
+        etiqueta_password = tk.Label(frame_form_fill, text="Contraseña", font=('Times',14), fg="black",bg='#fcfcfc', anchor="center")
         etiqueta_password.pack(fill=tk.X, padx=20,pady=10)
         self.password = ttk.Entry(frame_form_fill, font=('Times',14),width=20)
-        self.password.pack(fill=None, padx=20,pady=10,anchor="w")
+        self.password.pack(fill=None, padx=20,pady=10,anchor="center")
         self.password.config(show="*")
 
         inicio = tk.Button(frame_form_fill, text="Iniciar sesión", font=('Times', 15), bd=0,bg='#EC3F45',fg='white',width=20,command=self.verificar)
